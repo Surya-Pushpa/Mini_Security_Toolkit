@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>700</height>
+    <width>684</width>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>80</y>
+      <y>130</y>
       <width>291</width>
       <height>321</height>
      </rect>
@@ -26,6 +26,11 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QPushButton" name="encoding">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Encoding/Decoding</string>
        </property>
@@ -33,13 +38,35 @@
      </item>
      <item>
       <widget class="QPushButton" name="hashing">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Hashing</string>
+        <string>Hashing (Sender)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="hashing_2">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Hashing (Receiver)</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="steg">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Steganography</string>
        </property>
@@ -53,8 +80,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
-     <height>25</height>
+     <width>684</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

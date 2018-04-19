@@ -20,6 +20,8 @@ private slots:
 
     void on_hashing_clicked();
 
+    void on_hashing_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

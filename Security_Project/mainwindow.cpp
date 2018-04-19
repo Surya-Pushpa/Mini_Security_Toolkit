@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include"encrption.h"
 #include"hashing_sender.h"
+#include "hashing_receiver.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -37,4 +39,11 @@ void MainWindow::on_hashing_clicked()
     hashing_sender hash;
     hash.setModal(true);
     hash.exec();
+}
+
+void MainWindow::on_hashing_2_clicked()
+{
+    Hashing_receiver hashr;
+    hashr.setModal(true);
+    hashr.exec();
 }

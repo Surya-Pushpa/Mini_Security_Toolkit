@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include<math.h>
 
-
+//HELOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 using namespace std;
 //******************Variables for DES algo************************
 int key[64]=

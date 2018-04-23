@@ -27,7 +27,7 @@
      <item>
       <widget class="QPushButton" name="encoding">
        <property name="text">
-        <string>Encoding/Decoding</string>
+        <string>Encoding</string>
        </property>
       </widget>
      </item>

@@ -2,7 +2,7 @@
 #define ENCRPTION_H
 
 #include <QDialog>
-
+#include<qblowfish.h>
 namespace Ui {
 class Encrption;
 }
@@ -24,8 +24,18 @@ private slots:
 
     void on_radioButton_6_clicked();
 
+
+    void on_radioButton_3_clicked();
+    
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_radioButton_5_clicked();
+
 private:
     Ui::Encrption *ui;
+    qblowfish blowfish;
 };
 
 #endif // ENCRPTION_H

@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"encrption.h"
+#include"decrypt.h"
 #include"hashing_sender.h"
+#include<QDialog>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
         QPalette palette;
         palette.setBrush(QPalette::Background, bkgnd);
         this->setPalette(palette);
+       ui->encoding->setStyleSheet("background-color:orange;");
+       ui->hashing->setStyleSheet("background-color:orange;");
+       ui->steg->setStyleSheet("background-color:orange;");
 }
 
 MainWindow::~MainWindow()
@@ -38,3 +44,5 @@ void MainWindow::on_hashing_clicked()
     hash.setModal(true);
     hash.exec();
 }
+
+

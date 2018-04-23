@@ -1,15 +1,29 @@
 #include "encrption.h"
 #include "ui_encrption.h"
+#include<fileencrypt.h>
 #include"des.h"
+
+#include <QFileDialog>
+#include <QMessageBox>
 #include <string.h>
 #include <stdio.h>
 //#include<conio.h>
 #include <stdlib.h>
 #include<math.h>
 
+
+#define Nb 4
+int Nr=0;
+int Nk=0;
+
 //HELOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 using namespace std;
+
+//*****************Variables for AES***********************
+unsigned char in[16], out[16], state[4][4];
+ char *sttrr=new char[1000];
 //******************Variables for DES algo************************
+
 int key[64]=
 {
     0,0,0,1,0,0,1,1,
@@ -56,6 +70,7 @@ public:
     char * Encrypt(char *);
     char * Decrypt(char *);
 };
+Des d1;
 void Des::IP() //Initial Permutation
 {
     int k=58,i;
@@ -523,7 +538,7 @@ char * Des::Decrypt(char *Text1)
         }
     } //for loop ends here
     final[mc]='\0';
-    char *final1=new char[1000];
+    char *final1=new char[10000];
     for(i=0,j=strlen(Text); i<strlen(Text); i++,j++)
         final1[i]=final[j];
     final1[i]='\0';
@@ -573,11 +588,12 @@ void Des::keygen()
 //******************Variables for RSA algo**************************
 long int p, q, n, t, flag, e[100], d[100], temp[100], j, m[100],  i;
 long en[100];
+long mi[100];
 char msg[100];
 int prime(long int);
 void ce();
 long int cd(long int);
-void encrypt();
+void encryptRSA();
 void decrypt();
 //*******************************************************************
 
@@ -585,6 +601,27 @@ void decrypt();
 ///************************ Encryption using Ceaser Cypher *****************************/////
 string encryptCeaser(string text, int s)
 {
+    string result = "";
+
+    // traverse text
+    for (int i=0;i<text.length();i++)
+    {
+        // apply transformation to each character
+        // Encrypt Uppercase letters
+        if (isupper(text[i]))
+            result += char(int(text[i]+s-65)%26 +65);
+
+    // Encrypt Lowercase letters
+    else
+        result += char(int(text[i]+s-97)%26 +97);
+    }
+
+    // Return the resulting string
+    return result;
+}
+string decryptCeaser(string text, int s)
+{
+    s=26-s;
     string result = "";
 
     // traverse text
@@ -651,7 +688,7 @@ long int cd(long int x)
             return (k / x);
     }
 }
-void encrypt()
+void encryptRSA()
 {
     long int pt, ct, key = e[0], k;
     size_t len;
@@ -677,6 +714,29 @@ void encrypt()
     for (i = 0; en[i] != -1; i++)
         printf("%c", en[i]);*/
 }
+
+void decrypt()
+{
+    long int pt, ct, key = d[0], k;
+    i = 0;
+    while (en[i] != '\0')
+    {
+        ct = temp[i];
+        k = 1;
+        for (j = 0; j < key; j++)
+        {
+            k = k * ct;
+            k = k % n;
+        }
+        pt = k + 96;
+        m[i] = pt;
+        i++;
+    }
+    m[i] = -1;
+   /* cout << "\nTHE DECRYPTED MESSAGE IS\n";
+    for (i = 0; m[i] != -1; i++)
+        printf("%c", m[i]);*/
+}
 ////////////////////////********************************************//////////////////////////
 
 
@@ -694,9 +754,11 @@ Encrption::Encrption(QWidget *parent) :
     ui->radioButton->setStyleSheet("QRadioButton {  color : orange; }");
     ui->radioButton_3->setStyleSheet("QRadioButton {  color : orange; }");
     ui->radioButton_4->setStyleSheet("QRadioButton {  color : orange; }");
-    ui->radioButton_5->setStyleSheet("QRadioButton {  color : orange; }");
+    //ui->radioButton_5->setStyleSheet("QRadioButton {  color : orange; }");
     ui->radioButton_6->setStyleSheet("QRadioButton {  color : orange; }");
     ui->pushButton->setStyleSheet("background-color:orange;");
+    ui->pushButton_2->setStyleSheet("background-color:orange;");
+    ui->pushButton_3->setStyleSheet("background-color:orange;");
 
     QPixmap bkgnd("F:/6th Sem/Linux Project/Security_Project/darkbg.jpeg");
         bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -712,7 +774,102 @@ Encrption::~Encrption()
 
 void Encrption::on_pushButton_clicked()
 {
+    QString dd;
+    QMessageBox errorBox;
+    errorBox.setText("Enter");
+    if(ui->radioButton->isChecked()){
+        //cout << "\nENTER FIRST PRIME NUMBER\n";
+         //   cin >> p;
+       p=(ui->key1->toPlainText()).toLong();
+      //  p=47;
+            flag = prime(p);
+            if (flag == 0)
+            {
+              errorBox.setText("Public key is not a prime number.");
+              errorBox.exec();
+            }
+            //cout << "\nENTER ANOTHER PRIME NUMBER\n";
+            //cin >> q;
+            q=(ui->key2->toPlainText()).toLong();
+            flag = prime(q);
+            if (flag == 0 || p == q)
+            {
+                errorBox.setText("Private key is not a prime number.");
+                errorBox.exec();
+            }
+           // cout << "\nENTER MESSAGE\n";
+            //fflush(stdin);
+            //cin >> msg;
+            QString str=ui->text1->toPlainText();
 
+             strcpy(msg, str.toStdString().c_str());
+            for (i = 0; msg[i] != '\0'; i++)
+                m[i] = msg[i];
+            n = p * q;
+            t = (p - 1) * (q - 1);
+            ce();
+           /* cout << "\nPOSSIBLE VALUES OF e AND d ARE\n";
+            for (i = 0; i < j - 1; i++)
+                cout << e[i] << "\t" << d[i] << "\n";*/
+           // decrypt();
+          encryptRSA();
+            string qe="";
+            for(int i=0;en[i]!='\0';i++){
+                qe=qe+(char)en[i];
+            }
+            QString qw = QString::fromStdString(qe);
+            ui->text2->setText(qw);
+          //  decrypt();
+
+
+
+    }
+    else if(ui->radioButton_3->isChecked()){
+
+        blowfish.calcSubKey( ui->key1->toPlainText() );
+        QByteArray encyptedData;
+
+        QString dataString =  ui->text1->toPlainText();
+
+
+            encyptedData = blowfish.encrypt(  QByteArray(dataString.toUtf8()) );
+
+
+
+        ui->text2->setHtml( encyptedData.toBase64() );
+
+    }
+    else if(ui->radioButton_4->isChecked()){
+        QMessageBox errorBox;
+        errorBox.setText("Please Enter a value less than 26");
+
+
+
+        QString dd;
+        dd=ui->text1->toPlainText();
+        std::string ct = dd.toLocal8Bit().constData();
+        long int s=p=(ui->key2->toPlainText()).toLong();
+        if(s>26)errorBox.exec();
+        else{
+        string result=encryptCeaser(ct, s);
+
+        QString qw = QString::fromStdString(result);
+        ui->text2->setText(qw);}
+    }
+
+    else if(ui->radioButton_6->isChecked()){
+        Des d9;
+            char *str=new char[1000];
+
+            //strcpy(str,"PHOENIX it & ece solutions.");
+            //cout<<"Enter a string : ";
+            //cin >> str;
+            QString st=ui->text1->toPlainText();
+            strcpy(str, st.toStdString().c_str());
+
+
+        ui->text2->setText(d9.Encrypt(str));
+    }
 
 
 }
@@ -723,13 +880,6 @@ void Encrption::on_pushButton_clicked()
 //****ONClick event for Ceaser Cypher***********************************//////
 void Encrption::on_radioButton_4_clicked()
 {
-    QString dd;
-    dd=ui->text1->toPlainText();
-    std::string ct = dd.toLocal8Bit().constData();
-    string result=encryptCeaser(ct, 4);
-
-QString qw = QString::fromStdString(result);
-    ui->text2->setText(qw);
 
 }
 
@@ -741,78 +891,76 @@ QString qw = QString::fromStdString(result);
 //////**************Onclick event of RSA algo***************************///////
 void Encrption::on_radioButton_clicked()
 {
-    //cout << "\nENTER FIRST PRIME NUMBER\n";
-     //   cin >> p;
-    p=47;
-        flag = prime(p);
-        if (flag == 0)
-        {
-            //cout << "\nWRONG INPUT\n";
-            exit(1);
-        }
-        //cout << "\nENTER ANOTHER PRIME NUMBER\n";
-        //cin >> q;
-        q=53;
-        flag = prime(q);
-        if (flag == 0 || p == q)
-        {
-            //cout << "\nWRONG INPUT\n";
-            exit(1);
-        }
-       // cout << "\nENTER MESSAGE\n";
-        //fflush(stdin);
-        //cin >> msg;
-        QString str=ui->text1->toPlainText();
-
-         strcpy(msg, str.toStdString().c_str());
-        for (i = 0; msg[i] != '\0'; i++)
-            m[i] = msg[i];
-        n = p * q;
-        t = (p - 1) * (q - 1);
-        ce();
-       /* cout << "\nPOSSIBLE VALUES OF e AND d ARE\n";
-        for (i = 0; i < j - 1; i++)
-            cout << e[i] << "\t" << d[i] << "\n";*/
-        encrypt();
-        string qe="";
-        for(int i=0;en[i]!='\0';i++){
-            qe=qe+(char)en[i];
-        }
-        QString qw = QString::fromStdString(qe);
-        ui->text2->setText(qw);
-        //decrypt();
 
 }
 
 void Encrption::on_radioButton_6_clicked()
 {
-    Des d1;
-        char *str=new char[1000];
-        char *str1=new char[1000];
-        //strcpy(str,"PHOENIX it & ece solutions.");
-        //cout<<"Enter a string : ";
-        //cin >> str;
-        QString st=ui->text1->toPlainText();
-        strcpy(str, st.toStdString().c_str());
-        str1=d1.Encrypt(str);
-        /*cout<<"\ni/p Text: "<<str<<endl;
-        cout<<"\nCypher  : "<<str1<<endl;
-        //  ofstream fout("out2_fil.txt"); fout<<str1; fout.close();
-        cout<<"\no/p Text: "<<d2.Decrypt(str1)<<endl;*/
-       /* char *n=d2.Decrypt(str1);
-        string res2="";
-        for(int i=0;n[i]!='\0';i++){
-            res2=res2+n[i];
-        }*/
 
-        string res="";
-        for(int i=0;str1[i]!='\0';i++){
-            res=res+str1[i];
-        }
-
-   /* QString qw = QString::fromStdString(a);
-    ui->text2->setText(qw);*/
-        QString qw = QString::fromStdString(res);
-        // QString qw2 = QString::fromStdString(res2);
-    ui->text2->setText(qw);
 }
+
+
+
+void Encrption::on_radioButton_3_clicked()
+{
+
+}
+
+void Encrption::on_pushButton_2_clicked()
+{
+    if(ui->radioButton->isChecked()){
+        decrypt();
+        string qe="";
+        for(int i=0;m[i]!=-1;i++){
+           qe=qe+(char)m[i];
+        }
+        QString qw = QString::fromStdString(qe);
+        ui->text1->setText(qw);
+    }
+    else if(ui->radioButton_6->isChecked()){
+
+        Des d2;
+        char *str=new char[10000];
+
+        QString st=ui->text2->toPlainText();
+        strcpy(str, st.toStdString().c_str());
+
+        ui->text1->setText(d2.Decrypt(str));
+
+    }
+    else if(ui->radioButton_4->isChecked()){
+        QString dd;
+        QMessageBox errorBox;
+        errorBox.setText("Please Enter a value less than 26");
+        dd=ui->text2->toPlainText();
+        std::string ct = dd.toLocal8Bit().constData();
+        long int s=p=(ui->key2->toPlainText()).toLong();
+        if(s>26) errorBox.exec();
+        else{
+        string result=decryptCeaser(ct, s);
+
+        QString qw = QString::fromStdString(result);
+        ui->text1->setText(qw);}
+    }
+    else if(ui->radioButton_3->isChecked()){
+
+        QByteArray decryptedData;
+
+
+            decryptedData = blowfish.decrypt( QByteArray::fromBase64( QByteArray( ui->text2->toPlainText().toUtf8() ) ) );
+
+
+        ui->text1->setHtml( decryptedData );
+    }
+
+}
+
+void Encrption::on_pushButton_3_clicked()
+{
+    FileEncrypt *enc=new FileEncrypt();
+    this->hide();
+    enc->show();
+
+
+}
+

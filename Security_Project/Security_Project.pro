@@ -18,14 +18,23 @@ SOURCES += main.cpp\
     des.cpp \
     hashing_sender.cpp \
     sha_1.cpp \
-    md5.cpp
+    md5.cpp \
+    decrypt.cpp \
+    fileencrypt.cpp \
+    qblowfish.cpp
 
 HEADERS  += mainwindow.h \
     encrption.h \
     des.h \
     hashing_sender.h \
-    md5.h
+    md5.h \
+    decrypt.h \
+    fileencrypt.h \
+    qblowfish.h \
+    HexPi.h
 
 FORMS    += mainwindow.ui \
     encrption.ui \
-    hashing_sender.ui
+    hashing_sender.ui \
+    decrypt.ui \
+    fileencrypt.ui
